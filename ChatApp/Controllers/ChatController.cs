@@ -1,5 +1,7 @@
 ﻿using ChatApp.Data;
+//using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ChatApp.Controllers
 {
@@ -14,14 +16,13 @@ namespace ChatApp.Controllers
             _context = context;
         }
 
-
-
         [HttpPost("send-message")]
-        public IActionResult SendMessage(int userId, int roomId, string messageText)
+        // [Authorize]
+        public IActionResult SendMessage(int roomId, string messageText)
         {
-            var user = _context.Users.Find(userId);
-            if (user == null)
-                return BadRequest("User doesn't exist");
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return BadRequest("Invalid user");
 
             var room = _context.Room.Find(roomId);
             if (room == null)
@@ -29,7 +30,7 @@ namespace ChatApp.Controllers
 
             var newMessage = new Message
             {
-                UserId = userId,
+                UserId = int.Parse(userId),
                 RoomId = roomId,
                 Created = DateTime.Now,
                 MessageText = messageText
@@ -40,8 +41,6 @@ namespace ChatApp.Controllers
 
             return Ok("Message added");
         }
-
-
 
 
         [HttpGet("get-messages")]
@@ -65,6 +64,4 @@ namespace ChatApp.Controllers
             return Ok(messages);
         }
     }
-
 }
-
