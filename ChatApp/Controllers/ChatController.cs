@@ -1,5 +1,5 @@
 ﻿using ChatApp.Data;
-//using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -17,7 +17,7 @@ namespace ChatApp.Controllers
         }
 
         [HttpPost("send-message")]
-        // [Authorize]
+        [Authorize]
         public IActionResult SendMessage(int roomId, string messageText)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -41,6 +41,8 @@ namespace ChatApp.Controllers
 
             return Ok("Message added");
         }
+
+
 
 
         [HttpGet("get-messages")]
