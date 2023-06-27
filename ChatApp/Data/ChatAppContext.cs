@@ -8,7 +8,7 @@ namespace ChatApp.Data
         public DbSet<Users> Users { get; set; }
         public DbSet<Room> Room { get; set; }
         public DbSet<Message> Messages { get; set; }
-
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=DAL\\SQLEXPRESS;Database=ChatAppDB;Trusted_Connection=True;Encrypt=False;");
@@ -38,6 +38,6 @@ namespace ChatApp.Data
         public Room Room { get; set; }
         public DateTime Created { get; set; }
         public string MessageText { get; set; }
-    }
+    }  
 
 }

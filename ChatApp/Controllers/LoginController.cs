@@ -19,7 +19,7 @@ namespace ChatApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(Users userParam)
+        public IActionResult Login(LoginRequest userParam)
         {
             var user = _context.Users
                 .SingleOrDefault(u => u.Email == userParam.Email && u.Password == userParam.Password);
