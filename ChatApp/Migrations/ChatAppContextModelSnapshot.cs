@@ -66,7 +66,7 @@ namespace ChatApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Room");
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("ChatApp.Data.Users", b =>

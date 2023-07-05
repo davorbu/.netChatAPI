@@ -16,45 +16,38 @@ namespace ChatApp.Controllers
         {
             _context = context;
         }
-
         [HttpPost("send-message")]
         [Authorize]
-        public IActionResult SendMessage(SendMessageRequest request)
+        public IActionResult SendMessage(SendMessageRequest parms)
         {
-            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId))
-                return BadRequest("Invalid user");
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+                return Unauthorized();
 
-            var room = _context.Room.Find(request.RoomId);
-            if (room == null)
-                return BadRequest("Room doesn't exist");
+            var user = _context.Users.Find(int.Parse(userId));
+            
 
             var newMessage = new Message
             {
-                UserId = int.Parse(userId),
-                RoomId = request.RoomId,
+                UserId = parms.UserId, 
+                RoomId = parms.RoomId,
                 Created = DateTime.Now,
-                MessageText = request.MessageText
+                MessageText = parms.MessageText
             };
 
             _context.Messages.Add(newMessage);
             _context.SaveChanges();
-
-            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-          
-            HttpContext.Request.Headers["Authorization"] = $"Bearer {token}";
 
             return Ok("Message added");
         }
 
 
 
-
-
         [HttpGet("get-messages")]
+        [Authorize]
         public IActionResult GetMessages(int roomId)
         {
-            var room = _context.Room.Find(roomId);
+            var room = _context.Rooms.Find(roomId);
             if (room == null)
                 return BadRequest("Room doesn't exist");
 

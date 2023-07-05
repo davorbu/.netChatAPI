@@ -37,10 +37,10 @@ builder.Services.AddEndpointsApiExplorer();
 var app = builder.Build();
 
 app.UseCors(policy =>
-    policy.WithOrigins("http://localhost:3000")
-    .AllowAnyMethod()
-    .AllowAnyHeader()
-    .AllowCredentials());
+    policy.WithOrigins("http://localhost:3000", "https://localhost:7295")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials());
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
